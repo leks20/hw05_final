@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "venv\\Scripts\\python.exe",
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylintPath": "venv/Scripts/pylint.exe",
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true
+}
