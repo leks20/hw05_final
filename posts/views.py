@@ -10,9 +10,9 @@ User = get_user_model()
 
 
 def index(request):
-    post_list = Post.objects.select_related('author').select_related(
-        'group').order_by("-pub_date").annotate(
+    post_list = Post.objects.select_related('author', 'group').order_by("-pub_date").annotate(
         comment_count=Count('comment'))
+
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -28,9 +28,11 @@ def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     posts = Post.objects.filter(group=group).select_related('author').order_by(
         "-pub_date").annotate(comment_count=Count('comment'))
+
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+
     return render(request, "group.html", {
         'group': group,
         'paginator': paginator,
@@ -67,22 +69,27 @@ def new_post(request):
 
 
 def profile(request, username):
-    profile = get_object_or_404(User, username=username)
     following = False
     follow_button = False
+
+    profile = get_object_or_404(User, username=username)
     posts_profile = Post.objects.filter(author=profile).select_related(
         'group').order_by("-pub_date").annotate(comment_count=Count('comment'))
     posts_count = posts_profile.count()
+
     followers = Follow.objects.filter(author=profile).count
     following_authors = Follow.objects.filter(user=profile).count
+
     paginator = Paginator(posts_profile, 5)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+
     if request.user.is_authenticated:
         if Follow.objects.filter(user=request.user, author=profile).count():
             following = True
     if request.user != profile:
         follow_button = True
+
     return render(request, "profile.html", {
         'paginator': paginator,
         'page': page,
@@ -98,12 +105,14 @@ def profile(request, username):
 
 def post_view(request, username, post_id):
     profile = get_object_or_404(User, username=username)
-    post = Post.objects.select_related('author').select_related(
-        'group').annotate(comment_count=Count('comment')).get(pk=post_id)
+    post = Post.objects.select_related('author', 'group').annotate(
+        comment_count=Count('comment')).get(pk=post_id)
     posts_count = Post.objects.filter(author=profile).count()
+
     comments = Comment.objects.filter(post=post).select_related(
         'author').order_by("-created").all()
     form = CommentForm()
+
     return render(request, "post.html", {
         'profile': profile,
         'post': post,
@@ -195,15 +204,15 @@ def add_comment(request, username, post_id):
 
 @login_required
 def follow_index(request):
-    # список авторов, на которых подписан пользователь
-    followings = Follow.objects.filter(
-        user=request.user).values_list('author', flat=True)
-    posts_list = Post.objects.filter(author__in=followings).select_related(
-        'author').select_related('group').order_by(
-        "-pub_date").annotate(comment_count=Count('comment'))
+    posts_list = Post.objects.filter(
+        author__following__user=request.user).select_related(
+        'author', 'group').order_by("-pub_date").annotate(
+        comment_count=Count('comment'))
+
     paginator = Paginator(posts_list, 5)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+
     return render(request, "follow.html", {
         'paginator': paginator,
         'page': page,

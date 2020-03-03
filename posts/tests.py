@@ -64,7 +64,7 @@ class PostsTest(TestCase):
     def test_comment(self):
         Post.objects.create(
             author=self.user,
-            text="Проверочный текст для комментария")
+            text="Текст")
 
         self.client.post('/proverkin/1/comment/', {
             'text': "Проверочный комментарий",
@@ -74,12 +74,13 @@ class PostsTest(TestCase):
         self.assertContains(response, 'Проверочный комментарий')
 
         self.client.logout()
-        try:
-            self.client.post('/proverkin/1/comment/', {
+
+        self.client.post('/proverkin/1/comment/', {
                 'text': "Проверочный комментарий 2"
                 }, follow=True)
-        except ValueError:
-            print("test_comment: Автором комментария может быть только авторизованный пользователь")
+
+        response = self.client.get('/proverkin/1/')
+        self.assertNotContains(response, 'Проверочный комментарий 2')
 
 
 class ErrorTest(TestCase):
