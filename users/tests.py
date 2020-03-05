@@ -15,9 +15,6 @@ class SignUpTest(TestCase):
             password='test123'
         )
 
-    def test_sign_up(self):
-        self.assertIn(self.user, User.objects.all())
-
     def test_mail(self):
         mail.send_mail(
             'Регистрация',

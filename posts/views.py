@@ -10,7 +10,8 @@ User = get_user_model()
 
 
 def index(request):
-    post_list = Post.objects.select_related('author', 'group').order_by("-pub_date").annotate(
+    post_list = Post.objects.select_related(
+        'author', 'group').order_by("-pub_date").annotate(
         comment_count=Count('comment'))
 
     paginator = Paginator(post_list, 10)
@@ -156,7 +157,7 @@ def post_edit(request, username, post_id):
 
 @login_required
 def post_delete(request, username, post_id):
-    author = User.objects.get(username=username)
+    author = get_object_or_404(User, username=username)
     post = Post.objects.get(pk=post_id)
 
     if request.user != author:
@@ -221,9 +222,9 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    author = User.objects.get(username=username)
-    count = Follow.objects.filter(user=request.user, author=author).count()
-    if request.user == author or count > 0:
+    author = get_object_or_404(User, username=username)
+    if request.user == author or Follow.objects.filter(
+            user=request.user, author=author).exists():
         return redirect("profile", username=username)
     else:
         Follow.objects.create(user=request.user, author=author)
@@ -232,7 +233,7 @@ def profile_follow(request, username):
 
 @login_required
 def profile_unfollow(request, username):
-    author = User.objects.get(username=username)
+    author = get_object_or_404(User, username=username)
     if request.user == author:
         return redirect("profile", username=username)
     else:
