@@ -25,16 +25,6 @@ class PostsTest(TestCase):
         )
         self.client.login(username='proverkin', password='proverkin123')
 
-    def test_logged_in(self):
-        response = self.client.get('/new/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_not_logged_in(self):
-        self.client.logout()
-        response = self.client.get('/new/')
-
-        self.assertRedirects(response, '/auth/login/?next=/new/')
-
     def test_post(self):
 
         response = self.client.post(
@@ -115,7 +105,7 @@ class MediaTest(TestCase):
         )
 
     def test_post_has_img(self):
-        with open('media/posts/123.jpeg', 'rb') as fp:
+        with open('media/posts/image.png', 'rb') as fp:
             self.client.post('/new/', {
                     'text': "Проверочный пост",
                     'image': fp,

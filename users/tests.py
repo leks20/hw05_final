@@ -14,6 +14,17 @@ class SignUpTest(TestCase):
             email='test@mail.ru',
             password='test123'
         )
+        self.client.login(username='test', password='test123')
+
+    def test_logged_in(self):
+        response = self.client.get('/new/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_not_logged_in(self):
+        self.client.logout()
+        response = self.client.get('/new/')
+
+        self.assertRedirects(response, '/auth/login/?next=/new/')
 
     def test_mail(self):
         mail.send_mail(
