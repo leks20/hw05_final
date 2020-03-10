@@ -110,6 +110,9 @@ def post_view(request, username, post_id):
         comment_count=Count('comment')).get(pk=post_id)
     posts_count = Post.objects.filter(author=profile).count()
 
+    followers = Follow.objects.filter(author=profile).count
+    following_authors = Follow.objects.filter(user=profile).count
+
     comments = Comment.objects.filter(post=post).select_related(
         'author').order_by("-created").all()
     form = CommentForm()
@@ -120,6 +123,8 @@ def post_view(request, username, post_id):
         'posts_count': posts_count,
         'comments': comments,
         'form': form,
+        'followers': followers,
+        'following_authors': following_authors
         })
 
 

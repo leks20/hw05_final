@@ -18,6 +18,12 @@ urlpatterns = [
     path("about/", include("django.contrib.flatpages.urls")),
     ]
 
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += (path("__debug__/", include(debug_toolbar.urls)),)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 urlpatterns += [
     path('about-us/', views.flatpage, {'url': '/about-us/'}, name='about-us'),
     path('terms/', views.flatpage, {'url': '/terms/'}, name='terms'),
@@ -27,9 +33,3 @@ urlpatterns += [
         'url': '/about-spec/'}, name='about-spec'),
     path("", include("posts.urls")),
 ]
-
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += (path("__debug__/", include(debug_toolbar.urls)),)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
