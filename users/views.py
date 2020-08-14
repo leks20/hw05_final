@@ -11,8 +11,9 @@ class SignUp(CreateView):
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        send_mail_ls(email)
+        self.send_mail_ls(email)
         return super().form_valid(form)
 
-    def send_mail_ls(email):
+    def send_mail_ls(self, email):
         send_mail('Регистрация', 'Вы успешно прошли регистрацию на сайте!', 'yatube.ru <admin@yatube.ru>', [email], fail_silently=False)
+
