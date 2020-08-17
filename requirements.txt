@@ -28,7 +28,6 @@ pylint-django==2.0.13
 pylint-plugin-utils==0.6
 pyparsing==2.4.6          # via packaging
 pyserial==3.4
-pytest==5.3.3
 pytest-django==3.8.0
 pytest==5.3.5             # via pytest-django
 pytz==2019.3              # via django
