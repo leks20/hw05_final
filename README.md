@@ -18,15 +18,17 @@ python3 -m venv venv
 
 pip install -r requirements.txt
 ```
-3) Выполните миграции:
+3) Создайте в директории файл .env и поместите туда SECRET_KEY, необходимый для запуска проекта
+
+4) Выполните миграции:
 ```
 python manage.py migrate
 ```
-4) Создайте суперпользователя:
+5) Создайте суперпользователя:
 ```
 python manage.py createsuperuser
 ```
-5) Запустите сервер:
+6) Запустите сервер:
 ```
 python manage.py runserver
 ```
