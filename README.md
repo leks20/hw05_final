@@ -32,7 +32,7 @@ python manage.py createsuperuser
 ```
 python manage.py runserver
 ```
-## Как работает Yatube:
+____________________________________
 
 Ваш проект запустился на http://127.0.0.1:8000/
 
