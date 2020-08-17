@@ -30,6 +30,7 @@ pyparsing==2.4.6          # via packaging
 pyserial==3.4
 pytest-django==3.8.0
 pytest==5.3.5             # via pytest-django
+python-dotenv==0.14.0
 pytz==2019.3              # via django
 requests==2.22.0
 six==1.14.0               # via packaging
