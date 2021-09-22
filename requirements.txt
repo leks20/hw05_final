@@ -6,7 +6,7 @@ autopep8==1.5
 certifi==2019.9.11        # via requests
 chardet==3.0.4            # via requests
 colorama==0.4.3
-Django==3.0.2
+Django==3.1.13
 django-debug-toolbar==2.2
 entrypoints==0.3
 idna==2.8                 # via requests
